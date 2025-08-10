@@ -4,8 +4,8 @@ import datetime
 # Create your models here.
 class Room(models.Model):
     room_number = models.CharField(max_length=10)
-    check_in = models.DateTimeField(default=datetime.datetime.now)
-    check_out = models.DateTimeField(default=datetime.datetime.now)
+    check_in = models.DateTimeField()
+    check_out = models.DateTimeField()
     guest_name = models.CharField(max_length=100)
 
     def __str__(self):
