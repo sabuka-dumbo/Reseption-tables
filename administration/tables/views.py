@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from datetime import datetime
+from datetime import datetime, timedelta
 from .models import Room
 
 def index(request):
@@ -19,7 +19,7 @@ def index(request):
             # Get all days between check_in and check_out
             delta = room.check_out - room.check_in
             for i in range(delta.days + 1):
-                day = (room.check_in + datetime.timedelta(days=i)).day
+                day = (room.check_in + timedelta(days=i)).day
                 booked_days.append(day)
         
         rooms.append({
