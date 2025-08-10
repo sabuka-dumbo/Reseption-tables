@@ -53,7 +53,17 @@ table {
     border-collapse: c  ollapse;
     border: 1px solid black;
 }
-
 th, td {
     border: 1px solid   black;
+}
+
+td {
+    min-width: 50px;
+    text-align: center;
+    padding: 5px;
+}
+th {
+    min-width: 50px;
+    text-align: center;
+    padding: 5px;
 }
