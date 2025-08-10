@@ -1,3 +1,4 @@
+{% load booking_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -37,44 +38,34 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Rooms 1-15 -->
-            {% for room in rooms %}
-            <tr>
-                <td>Room {{ room.room_number }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            {% endfor %}
-        </tbody>
+    {% for room in rooms %}
+    <tr>
+        <td>Room {{ room.room_number }}</td>
+        {% for day in 31|times %}
+            {% with current_day=day|add:1 %}
+                {% for booking in bookings %}
+                    {% if booking.room.id == room.id %}
+                        {% if current_day >= booking.check_in_date.day and current_day <= booking.check_out_date.day %}
+                            {% if current_day == booking.check_in_date.day %}
+                                <td colspan="{{ booking.check_out_date.day|subtract:booking.check_in_date.day|add:1 }}" 
+                                    style="background-color: #e3f2fd; border-left: 2px solid #2196f3; border-right: 2px solid #2196f3;">
+                                    {{ booking.guest_name }}
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            {% if forloop.last %} {# Only show empty if no booking matches #}
+                                <td></td>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% empty %}
+                    <td></td>
+                {% endfor %}
+            {% endwith %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</tbody>
     </table>
 </div>
     </body>
