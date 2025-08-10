@@ -43,4 +43,4 @@ def reception_table(request):
         'next_year': (last_day + timedelta(days=1)).year,
     }
     
-    return render(request, 'reception/table.html', context)
+    return render(request, 'index.html', context)
