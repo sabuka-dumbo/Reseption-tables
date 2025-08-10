@@ -41,26 +41,21 @@
     {% for room in rooms %}
     <tr>
         <td>Room {{ room.room_number }}</td>
-        {% for day in 31|times %}
-            {% with current_day=day|add:1 %}
-                {% for booking in bookings %}
-                    {% if booking.room.id == room.id %}
-                        {% if current_day >= booking.check_in_date.day and current_day <= booking.check_out_date.day %}
-                            {% if current_day == booking.check_in_date.day %}
-                                <td colspan="{{ booking.check_out_date.day|subtract:booking.check_in_date.day|add:1 }}" 
-                                    style="background-color: #e3f2fd; border-left: 2px solid #2196f3; border-right: 2px solid #2196f3;">
-                                    {{ booking.guest_name }}
-                                </td>
-                            {% endif %}
-                        {% else %}
-                            {% if forloop.last %} {# Only show empty if no booking matches #}
-                                <td></td>
-                            {% endif %}
-                        {% endif %}
+        {% for day in days %}
+            {% with booking=room.booking_set.all|get_booking_for_day:day %}
+                {% if booking %}
+                    {% if day == booking.check_in_date.day %}
+                        {# First day of booking - create the spanning cell #}
+                        <td colspan="{{ booking.duration }}" 
+                            style="background-color: #e3f2fd; 
+                                   border-left: 2px solid #2196f3; 
+                                   border-right: 2px solid #2196f3;">
+                            {{ booking.guest_name }}
+                        </td>
                     {% endif %}
-                {% empty %}
+                {% else %}
                     <td></td>
-                {% endfor %}
+                {% endif %}
             {% endwith %}
         {% endfor %}
     </tr>
