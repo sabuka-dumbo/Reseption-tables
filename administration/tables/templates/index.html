@@ -20,48 +20,49 @@
         </nav>
 
         <div style="overflow-x: auto; width: 100vw;">
-    <table>
-        <thead>
-            <tr>
-                <th colspan="32" style="text-align: left;">August</th>
-            </tr>
-            <tr>
-                <th>Room Number</th>
-                <!-- Days 1-31 -->
-                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-                <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
-                <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
-                <th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
-                <th>21</th><th>22</th><th>23</th><th>24</th><th>25</th>
-                <th>26</th><th>27</th><th>28</th><th>29</th><th>30</th>
-                <th>31</th>
-            </tr>
-        </thead>
-        <tbody>
-    {% for room in rooms %}
-    <tr>
-        <td>Room {{ room.room_number }}</td>
-        {% for day in days %}
-            {% with booking=room.booking_set.all|get_booking_for_day:day %}
-                {% if booking %}
-                    {% if day == booking.check_in_date.day %}
-                        {# First day of booking - create the spanning cell #}
-                        <td colspan="{{ booking.duration }}" 
-                            style="background-color: #e3f2fd; 
-                                   border-left: 2px solid #2196f3; 
-                                   border-right: 2px solid #2196f3;">
-                            {{ booking.guest_name }}
-                        </td>
-                    {% endif %}
-                {% else %}
-                    <td></td>
-                {% endif %}
-            {% endwith %}
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</tbody>
-    </table>
-</div>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="32" style="text-align: left;">August</th>
+                </tr>
+                <tr>
+                    <th>Room Number</th>
+                    <!-- Days 1-31 -->
+                    <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+                    <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+                    <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+                    <th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
+                    <th>21</th><th>22</th><th>23</th><th>24</th><th>25</th>
+                    <th>26</th><th>27</th><th>28</th><th>29</th><th>30</th>
+                    <th>31</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>Room {{ room.room_number }}</td>
+                    {% for day in days %}
+                        {% with booking=room.booking_set.all|get_booking_for_day:day %}
+                            {% if booking %}
+                                {% if day == booking.check_in_date.day %}
+                                    {# First day of booking - create spanning cell #}
+                                    <td colspan="{{ booking.duration }}" 
+                                        style="background-color: #e3f2fd;
+                                            border-left: 2px solid #2196f3;
+                                            border-right: 2px solid #2196f3;
+                                            text-align: center;">
+                                        {{ booking.guest_name }}
+                                    </td>
+                                {% endif %}
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     </body>
 </html>

@@ -15,3 +15,7 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking for {self.guest_name} in {self.room}"
+    
+    @property
+    def duration(self):
+        return (self.check_out_date - self.check_in_date).days + 1
