@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from .models import *
 
 def reception_table(request):
-    return render(request, 'index.html')
+    rooms = Room.objects.all()
+    return render(request, 'index.html', {
+        'rooms': rooms
+    })
