@@ -1,70 +1,81 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reception Table - {{ month_name }} {{ year }}</title>
-    <link rel="stylesheet" href="{% static 'reception/styles.css' %}">
-</head>
-<body>
-    <nav class="navigation">
-        <h1>Hotel Reception - {{ month_name }} {{ year }}</h1>
-        
-        <div class="nav-links">
-            <a href="{% url 'admin:reception_room_add' %}" class="button">Add Room</a>
-            <a href="{% url 'admin:reception_booking_add' %}" class="button">Add Booking</a>
-            <a href="{% url 'admin:index' %}" class="button">Admin</a>
-            
-            <div class="month-navigation">
-                <a href="?year={{ prev_year }}&month={{ prev_month }}" class="button">← Previous</a>
-                <span>{{ month_name }} {{ year }}</span>
-                <a href="?year={{ next_year }}&month={{ next_month }}" class="button">Next →</a>
-            </div>
-        </div>
-    </nav>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tables</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body> 
+        <nav class="navigation">
+            <h1>Tables</h1>
 
-    <div class="table-container">
-        <table class="booking-table">
-            <thead>
-                <tr>
-                    <th colspan="{{ days_in_month|length|add:1 }}" class="month-header">
-                        {{ month_name }} {{ year }}
-                    </th>
-                </tr>
-                <tr>
-                    <th class="room-header">Room Number</th>
-                    {% for day in days_in_month %}
-                        <th class="day-header {% if day.day == 1 %}first-day{% endif %}">
-                            {{ day.day }}<br>{{ day|date:"D" }}
-                        </th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for room in rooms %}
-                <tr>
-                    <td class="room-cell">
-                        <strong>Room {{ room.room_number }}</strong><br>
-                        <small>{{ room.room_type|default:"Standard" }} ({{ room.capacity }} pax)</small>
-                    </td>
-                    {% for day in days_in_month %}
-                        <td class="day-cell {% for booking in bookings %}{% if booking.room == room and booking.is_active_on_date(day) %}booked booking-{{ booking.status }}{% endif %}{% endfor %}">
-                            {% for booking in bookings %}
-                                {% if booking.room == room and booking.is_active_on_date(day) %}
-                                    {% if day == booking.check_in_date %}
-                                        <div class="booking-info" title="{{ booking.guest_name }} ({{ booking.check_in_date }} to {{ booking.check_out_date }})">
-                                            {{ booking.guest_name|truncatechars:10 }}
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
+            <div style="margin-left: 20px; display: inline-block;">
+                <a href="">Add</a>
+                <a href="">Change</a>
+                <a href="">Delete</a>
+            </div>
+        </nav>
+
+        <div style="overflow-x: auto; width: 100vw;">
+    <table>
+        <thead>
+            <tr>
+                <th colspan="32" style="text-align: left;">August</th>
+            </tr>
+            <tr>
+                <th>Room Number</th>
+                <!-- Days 1-31 -->
+                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+                <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+                <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+                <th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
+                <th>21</th><th>22</th><th>23</th><th>24</th><th>25</th>
+                <th>26</th><th>27</th><th>28</th><th>29</th><th>30</th>
+                <th>31</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rooms 1-15 -->
+            {% for room in rooms %}
+            <tr>
+                <td>Room {{ room.room_number }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    </body>
 </html>
