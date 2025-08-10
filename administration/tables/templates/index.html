@@ -42,10 +42,10 @@
         </tr>
       </thead>
       <tbody>
-        {% for room_number in rooms %}
+        {% for room in rooms %}
           <tr>
-            <td>{{ room_number }}</td>
-            {% for cell in room_cells[room_number] %}
+            <td>{{ room.room_number }}</td>
+            {% for cell in room_cells[room.room_number] %}
               {% if cell == None %}
                 {# skip covered days #}
               {% elif cell == '' %}
