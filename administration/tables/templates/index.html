@@ -7,43 +7,57 @@
     <title>Room Booking Table</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .navigation {
+            margin-bottom: 20px;
+        }
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+            margin-top: 20px;
+        }
         table {
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 10px; /* Space between cells */
             width: 100%;
         }
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
+            min-width: 30px;
+            position: relative;
         }
         th {
             background-color: #f2f2f2;
             position: sticky;
             top: 0;
-        }
-        .booked {
-            background-color: #ffcccc;
-            position: relative;
-        }
-        .booked:hover::after {
-            content: attr(data-guest);
-            position: absolute;
-            background: #333;
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
-            z-index: 100;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
+            font-weight: bold;
         }
         .room-header {
             font-weight: bold;
             background-color: #e6f3ff;
+            position: sticky;
+            left: 0;
+        }
+        .booked {
+            background-color: #ffcccc;
+        }
+        .booked-day {
+            display: block;
+            font-size: 0.8em;
+            margin-top: 3px;
+            word-break: break-word;
         }
         .today {
             background-color: #ffffcc;
+            font-weight: bold;
+        }
+        .day-header {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -55,14 +69,14 @@
         </div>
     </nav>
 
-    <div style="overflow-x: auto; width: 100vw; margin-top: 20px;">
+    <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th class="room-header">Room Number</th>
                     <!-- Days 1-31 -->
                     {% for day in days %}
-                        <th {% if day == datetime.now.day %}class="today"{% endif %}>{{ day }}</th>
+                        <th class="day-header {% if day == today %}today{% endif %}">{{ day }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -71,11 +85,10 @@
                 <tr>
                     <td class="room-header">Room {{ room.room_number }}</td>
                     {% for day in days %}
-                        <td {% if day in room.booked_days %} 
-                                class="booked" 
-                                data-guest="{{ room.guest_name }}"
-                            {% endif %}>
-                            {% if day in room.booked_days %}✔{% endif %}
+                        <td {% if day in room.booked_days %}class="booked{% if day == today %} today{% endif %}"{% elif day == today %}class="today"{% endif %}>
+                            {% if day in room.booked_days %}
+                                <span class="booked-day">{{ room.guest_names|get_item:day }}</span>
+                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>
