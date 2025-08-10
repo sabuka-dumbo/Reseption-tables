@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from datetime import datetime, timedelta
 from .models import Room
-
 def index(request):
     now = datetime.now()
     current_month = now.strftime("%B %Y")
