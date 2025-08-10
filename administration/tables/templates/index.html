@@ -1,19 +1,14 @@
 {% load static %}
-{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Booking Table</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-        }
-        .navigation {
-            margin-bottom: 20px;
         }
         .table-container {
             overflow-x: auto;
@@ -21,8 +16,7 @@
             margin-top: 20px;
         }
         table {
-            border-collapse: separate;
-            border-spacing: 10px; /* Space between cells */
+            border-collapse: collapse;
             width: 100%;
         }
         th, td {
@@ -30,13 +24,6 @@
             padding: 8px;
             text-align: center;
             min-width: 30px;
-            position: relative;
-        }
-        th {
-            background-color: #f2f2f2;
-            position: sticky;
-            top: 0;
-            font-weight: bold;
         }
         .room-header {
             font-weight: bold;
@@ -44,40 +31,41 @@
             position: sticky;
             left: 0;
         }
+        /* Booking group styling */
         .booked {
             background-color: #ffcccc;
+            border-left: none;
+            border-right: none;
+            margin: 0 -1px;
         }
-        .booked-day {
-            display: block;
-            font-size: 0.8em;
-            margin-top: 3px;
-            word-break: break-word;
+        .booked-start {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border-left: 1px solid #ddd !important;
+        }
+        .booked-end {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-right: 1px solid #ddd !important;
         }
         .today {
             background-color: #ffffcc;
             font-weight: bold;
         }
-        .day-header {
-            font-weight: bold;
+        .guest-name {
+            font-size: 0.8em;
+            word-break: break-word;
         }
     </style>
 </head>
-<body> 
-    <nav class="navigation">
-        <h1>Room Booking Table - {{ current_month }}</h1>
-        <div style="margin-left: 20px; display: inline-block;">
-            <a href="{% url 'admin:index' %}">Admin</a>
-        </div>
-    </nav>
-
+<body>
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th class="room-header">Room Number</th>
-                    <!-- Days 1-31 -->
+                    <th class="room-header">Room</th>
                     {% for day in days %}
-                        <th class="day-header {% if day == today %}today{% endif %}">{{ day }}</th>
+                        <th {% if day == today %}class="today"{% endif %}>{{ day }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -86,11 +74,18 @@
                 <tr>
                     <td class="room-header">Room {{ room.room_number }}</td>
                     {% for day in days %}
-                        <td {% if day in room.booked_days %}class="booked{% if day == today %} today{% endif %}"{% elif day == today %}class="today"{% endif %}>
-                            {% if day in room.booked_days %}
-                                <span class="booked-day">{{ room.guest_names|get_item:day }}</span>
+                        {% with booking=room.booking_groups|get_booking_for_day:day %}
+                        <td class="{% if booking %} 
+                                  booked 
+                                  {% if day == booking.start %}booked-start{% endif %}
+                                  {% if day == booking.end %}booked-end{% endif %}
+                                  {% endif %}
+                                  {% if day == today %} today{% endif %}">
+                            {% if booking and day == booking.start %}
+                                <span class="guest-name">{{ booking.guest }}</span>
                             {% endif %}
                         </td>
+                        {% endwith %}
                     {% endfor %}
                 </tr>
                 {% endfor %}
