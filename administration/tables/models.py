@@ -6,3 +6,12 @@ class Room(models.Model):
 
     def __str__(self):
         return f"Room {self.room_number})"
+
+class Booking(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    guest_name = models.CharField(max_length=100)
+    check_in_date = models.DateField()
+    check_out_date = models.DateField()
+
+    def __str__(self):
+        return f"Booking for {self.guest_name} in {self.room}"
