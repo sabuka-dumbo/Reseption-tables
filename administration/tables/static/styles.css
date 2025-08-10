@@ -1,0 +1,59 @@
+body {
+    background-color: white;
+    margin: 0;
+}
+
+.navigation {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: calc(100% - 40px);
+    height: max-content;
+    padding: 20px;
+    background-color: gainsboro;
+}
+
+h1 {
+    font-size: 25px;
+    padding: 0;
+    margin: 0;
+    font-family: "Itim";
+    font-weight: bold;
+    display: inline-block;
+}
+
+h2 {
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+    font-family: "Itim";
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+
+a {
+    display: inline-block;
+    width: max-content;
+    font-size: 20px;
+    font-family: "Itim";
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+table {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: max-content;
+    overflow-x: auto;
+    border-collapse: c  ollapse;
+    border: 1px solid black;
+}
+
+th, td {
+    border: 1px solid   black;
+}
