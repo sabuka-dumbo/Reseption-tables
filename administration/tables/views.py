@@ -10,9 +10,8 @@ def index(request):
     })
 
 def delete_booking(request):
-    bookings = Booking.objects.all().select_related('room')
     if request.method == 'POST':
         booking_id = request.POST.get('booking_id')
         # Logic to delete the booking
 
-    return render(request, 'delete.html', {'bookings': bookings})
+    return render(request, 'delete.html')
