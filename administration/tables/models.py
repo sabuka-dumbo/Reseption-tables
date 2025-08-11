@@ -3,6 +3,7 @@ from django.utils import timezone
 
 class Room(models.Model):
     room_number = models.CharField(max_length=10, unique=True)
+    room_price = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Room {self.room_number})"
@@ -12,6 +13,7 @@ class Booking(models.Model):
     guest_name = models.CharField(max_length=100)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
+    persons = models.IntegerField(default=1)
 
     def __str__(self):
         return f"Booking for {self.guest_name} in {self.room}"
