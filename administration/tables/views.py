@@ -8,3 +8,9 @@ def index(request):
         'rooms': rooms,
         'days': days
     })
+
+def delete_booking(request):
+    if request.method == 'POST':
+        booking_id = request.POST.get('booking_id')
+        # Logic to delete the booking
+    return render(request, 'delete.html')

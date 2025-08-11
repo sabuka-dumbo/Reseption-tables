@@ -19,3 +19,28 @@ class Booking(models.Model):
     @property
     def duration(self):
         return (self.check_out_date - self.check_in_date).days + 1
+
+class DeletedBookings(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    guest_name = models.CharField(max_length=100)
+    check_in_date = models.DateField()
+    check_out_date = models.DateField()
+    deleted_at = models.DateTimeField(auto_now_add=True)
+    deleted_by = models.CharField(max_length=150)
+
+    def __str__(self):
+        return f"Deleted by {self.deleted_by} on {self.deleted_at}"
+
+class ChangedBookings(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    old_guest_name = models.CharField(max_length=100)
+    new_guest_name = models.CharField(max_length=100)
+    old_check_in_date = models.DateField()
+    old_check_out_date = models.DateField()
+    new_check_in_date = models.DateField()
+    new_check_out_date = models.DateField()
+    changed_at = models.DateTimeField(auto_now_add=True)
+    changed_by = models.CharField(max_length=150)
+
+    def __str__(self):
+        return f"Changed by {self.changed_by} on {self.changed_at}"
