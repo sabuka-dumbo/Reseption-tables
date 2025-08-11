@@ -94,7 +94,8 @@
                             {% if booking %}
                                 {% if day == booking.check_in_date.day %}
                                     <td colspan="{{ booking.duration }}" 
-                                        class="booking">
+                                        class="booking"
+                                        data-price="{{ booking.room.room_price }}">
                                         {{ booking.guest_name }}
                                     </td>
                                 {% endif %}
@@ -125,9 +126,10 @@
             document.querySelectorAll('.booking').forEach(cell => {
                 cell.addEventListener('mousemove', e => {
                     const guestName = cell.textContent.trim() || 'Booked';
+                    const price = cell.getAttribute('data-price') || 'N/A';
                     tooltip.style.left = (e.pageX + 15) + 'px';
                     tooltip.style.top = (e.pageY + 15) + 'px';
-                    tooltip.textContent = guestName;
+                    tooltip.textContent = `${guestName} — $${price}`;
                     tooltip.style.display = 'block';
                 });
                 cell.addEventListener('mouseleave', () => {
