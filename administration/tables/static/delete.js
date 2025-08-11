@@ -13,7 +13,7 @@ fetch("/get_bookings/", {
         const booking_div = document.createElement("div");
         booking_div.classList.add("booking");
         booking_div.innerHTML = `
-            <p>Room: ${booking.room}</p>
+            <p>Room: ${booking.room.room_number}</p>
         `;
         container_div.appendChild(booking_div);
     }
