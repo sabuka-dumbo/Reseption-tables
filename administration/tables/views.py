@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 import json
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 
@@ -70,23 +71,46 @@ def add_booking(request):
         check_out_date = request.POST.get('check_out_date')
         added_by = request.POST.get('who_added')
 
+        # Convert string dates to date objects if needed
+        # Assuming your form sends dates in 'YYYY-MM-DD' format
+        from datetime import datetime
+        try:
+            check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
+            check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
+        except ValueError:
+            # Invalid date format, redirect back with error or handle accordingly
+            print("Invalid date format")
+            return redirect('index')
+
+        # Check for overlapping bookings for the same room
+        overlapping_bookings = Booking.objects.filter(
+            room=room2,
+            check_in_date__lt=check_out,  # booking starts before the requested check_out
+            check_out_date__gt=check_in   # booking ends after the requested check_in
+        )
+
+        if overlapping_bookings.exists():
+            return redirect('index')
+
+        # If available, create bookings
         Booking.objects.create(
             room=room2,
             guest_name=guest_name,
-            check_in_date=check_in_date,
-            check_out_date=check_out_date
+            check_in_date=check_in,
+            check_out_date=check_out
         )
 
         AddedBookings.objects.create(
             room=room2,
             guest_name=guest_name,
-            check_in_date=check_in_date,
-            check_out_date=check_out_date,
+            check_in_date=check_in,
+            check_out_date=check_out,
             added_by=added_by,
             added_at=timezone.now()
         )
 
         return redirect('index')
+
     else:
         return render(request, 'add.html')
     
