@@ -10,12 +10,11 @@
     </head>
     <body> 
         <nav class="navigation">
-            <h1>Tables</h1>
+            <h1><a href="{% url 'index' %}">Tables</a></h1>
 
             <div style="margin-left: 20px; display: inline-block;">
-                <a href="">Add</a>
-                <a href="">Change</a>
-                <a href="">Delete</a>
+                <a href="{% url 'add_booking' %}">Add</a>
+                <a href="{% url 'delete_booking' %}">Delete</a>
             </div>
         </nav>
 
@@ -26,10 +25,13 @@
                 </select>
 
                 <input type="text" name="who_added" required placeholder="Who adds the booking" min="4">
+
+                <input type="date" name="check_in_date" id="check_in_date" required>
+                <input type="date" name="check_out_date" id="check_out_date" required>
             </div>
 
-            <h1>Are you sure you want to delete the booking?</h1>
-            <button type="submit">Delete Booking</button>
+            <h1>Are you sure you want to add the booking?</h1>
+            <button type="submit">Add Booking</button>
         </form>
 
         <script src="{% static 'add.js' %}"></script>

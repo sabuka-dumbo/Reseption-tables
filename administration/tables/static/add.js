@@ -17,8 +17,6 @@ fetch("/get_rooms/", {
         `;
         select_input.appendChild(booking_div);
     }
-
-    console.log(data.bookings);
 })
 .catch(error => {
     console.error('Error:', error);

@@ -70,9 +70,7 @@ def add_booking(request):
 def get_rooms(request):
     if request.method == "POST":
         try:
-            json.loads(request.body)
-            rooms = Room.objects.all().values('id', 'room_number')
-
+            rooms = list(Room.objects.all().values('id', 'room_number'))
             return JsonResponse({"rooms": rooms})
         except json.JSONDecodeError as e:
             return JsonResponse({"error": str(e)}, status=400)
