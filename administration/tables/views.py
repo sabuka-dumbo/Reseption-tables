@@ -68,12 +68,22 @@ def add_booking(request):
         guest_name = request.POST.get('guest_name')
         check_in_date = request.POST.get('check_in_date')
         check_out_date = request.POST.get('check_out_date')
+        added_by = request.POST.get('who_added')
 
         Booking.objects.create(
             room=room2,
             guest_name=guest_name,
             check_in_date=check_in_date,
             check_out_date=check_out_date
+        )
+
+        AddedBookings.objects.create(
+            room=room2,
+            guest_name=guest_name,
+            check_in_date=check_in_date,
+            check_out_date=check_out_date,
+            added_by=added_by,
+            added_at=timezone.now()
         )
 
         return redirect('index')

@@ -32,7 +32,7 @@ class DeletedBookings(models.Model):
         return f"Deleted by {self.deleted_by} on {self.deleted_at}"
 
 class AddedBookings(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, default='')
     guest_name = models.CharField(max_length=100)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
