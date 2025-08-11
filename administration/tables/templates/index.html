@@ -39,7 +39,7 @@
                     <th colspan="32" style="text-align: left;">August</th>
                 </tr>
                 <tr>
-                    <th>Room Number</th>
+                    <th>Room Number & Price</th>
                     <!-- Days 1-31 -->
                     <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
                     <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
@@ -53,7 +53,7 @@
             <tbody>
                 {% for room in rooms %}
                 <tr>
-                    <td>Room {{ room.room_number }}</td>
+                    <td>Room {{ room.room_number }} — ${{ room.room_price }}</td>
                     {% for day in days %}
                         {% with booking=room.booking_set.all|get_booking_for_day:day %}
                             {% if booking %}
