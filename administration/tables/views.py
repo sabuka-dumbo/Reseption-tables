@@ -59,3 +59,9 @@ def get_bookings(request):
             return JsonResponse({"error": str(e)}, status=400)
 
     return JsonResponse({"error": "Only POST allowed"}, status=405)
+
+def change_booking(request):
+    if request.method == 'POST':
+        pass
+    else:
+        return render(request, 'change.html')
