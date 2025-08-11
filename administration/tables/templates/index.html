@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
     <body> 
+        <div id="tooltip" style="position:absolute; display:none; pointer-events:none; background:#333; color:#fff; padding:6px 10px; border-radius:4px; font-size:14px; z-index:10000; white-space: nowrap;"></div>
+
         <nav class="navigation">
             <h1><a href="{% url 'index' %}">Tables</a></h1>
 
@@ -76,6 +78,23 @@
             msg.classList.remove('show');
         }, 4000); // hide after 4 seconds
         }
+  });
+
+    const tooltip = document.getElementById('tooltip');
+
+  document.querySelectorAll('.booking').forEach(cell => {
+    cell.addEventListener('mousemove', e => {
+      const guestName = cell.textContent.trim() || 'Booked';
+
+      tooltip.style.left = (e.pageX + 15) + 'px';
+      tooltip.style.top = (e.pageY + 15) + 'px';
+      tooltip.textContent = guestName;
+      tooltip.style.display = 'block';
+    });
+
+    cell.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
   });
     </script>
     </body>
