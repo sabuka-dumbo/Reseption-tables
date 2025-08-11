@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 import json
 from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     rooms = Room.objects.prefetch_related('booking_set').all()
@@ -18,19 +19,14 @@ def delete_booking(request):
 
     return render(request, 'delete.html')
 
+@csrf_exempt
+def get_bookings(request):
+    if request.method == "POST":
+        try:
+            data_from_js = json.loads(request.body)
+            bookings = list(Booking.objects.values())
+            return JsonResponse({"bookings": bookings})
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": str(e)}, status=400)
 
-def items_api(request):
-    if request.method == "GET":
-        bookings = Booking.objects.all()
-        return JsonResponse({"items": bookings})
-
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-        name = data.get("name", "").strip()
-        description = data.get("description", "").strip()
-        if not name:
-            return HttpResponseBadRequest("Missing 'name'")
-        item = Item.objects.create(name=name, description=description)
-        return JsonResponse({"item": item.to_dict()}, status=201)
-    except json.JSONDecodeError:
-        return HttpResponseBadRequest("Invalid JSON")
+    return JsonResponse({"error": "Only POST allowed"}, status=405)
