@@ -7,20 +7,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tables</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <style>
+        /* Tooltip styling */
+        #tooltip {
+            position: absolute;
+            display: none;
+            pointer-events: none;
+            background: #333;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 10000;
+            white-space: nowrap;
+        }
+
+        /* Booking cell styling */
+        .booking {
+            background-color: #e3f2fd;
+            border-left: 2px solid #2196f3;
+            border-right: 2px solid #2196f3;
+            text-align: center;
+            cursor: default;
+        }
+
+        /* Error message styling */
+        #message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 9999;
+        }
+
+        #message.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
 </head>
 <body>
     <!-- Tooltip div -->
-    <div id="tooltip" style="
-        position:absolute;
-        display:none;
-        pointer-events:none;
-        background:#333;
-        color:#fff;
-        padding:6px 10px;
-        border-radius:4px;
-        font-size:14px;
-        z-index:10000;
-        white-space: nowrap;"></div>
+    <div id="tooltip"></div>
 
     <nav class="navigation">
         <h1><a href="{% url 'index' %}">Tables</a></h1>
@@ -59,11 +94,7 @@
                             {% if booking %}
                                 {% if day == booking.check_in_date.day %}
                                     <td colspan="{{ booking.duration }}" 
-                                        class="booking"
-                                        style="background-color: #e3f2fd;
-                                            border-left: 2px solid #2196f3;
-                                            border-right: 2px solid #2196f3;
-                                            text-align: center;">
+                                        class="booking">
                                         {{ booking.guest_name }}
                                     </td>
                                 {% endif %}
@@ -89,7 +120,7 @@
                 }, 4000);
             }
 
-            // Tooltip logic
+            // Tooltip logic for booking cells
             const tooltip = document.getElementById('tooltip');
             document.querySelectorAll('.booking').forEach(cell => {
                 cell.addEventListener('mousemove', e => {
