@@ -4,6 +4,7 @@ import json
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 def index(request):
     rooms = Room.objects.prefetch_related('booking_set').all()
@@ -64,42 +65,34 @@ def get_bookings(request):
 def add_booking(request):
     if request.method == 'POST':
         room_id = request.POST.get('room-id')
-        print(room_id)
         room2 = Room.objects.get(id=room_id)
         guest_name = request.POST.get('guest_name')
         check_in_date = request.POST.get('check_in_date')
         check_out_date = request.POST.get('check_out_date')
         added_by = request.POST.get('who_added')
 
-        # Convert string dates to date objects if needed
-        # Assuming your form sends dates in 'YYYY-MM-DD' format
-        from datetime import datetime
         try:
             check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
             check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
         except ValueError:
-            # Invalid date format, redirect back with error or handle accordingly
-            print("Invalid date format")
             return redirect('index')
 
-        # Check for overlapping bookings for the same room
-        overlapping_bookings = Booking.objects.filter(
+        overlapping = Booking.objects.filter(
             room=room2,
-            check_in_date__lt=check_out,  # booking starts before the requested check_out
-            check_out_date__gt=check_in   # booking ends after the requested check_in
+            check_in_date__lt=check_out,
+            check_out_date__gt=check_in
         )
 
-        if overlapping_bookings.exists():
-            return redirect('index')
+        if overlapping.exists():
+            # Redirect with error flag in URL query params
+            return redirect('/?error=notavailable')
 
-        # If available, create bookings
         Booking.objects.create(
             room=room2,
             guest_name=guest_name,
             check_in_date=check_in,
             check_out_date=check_out
         )
-
         AddedBookings.objects.create(
             room=room2,
             guest_name=guest_name,
@@ -108,12 +101,10 @@ def add_booking(request):
             added_by=added_by,
             added_at=timezone.now()
         )
-
         return redirect('index')
 
-    else:
-        return render(request, 'add.html')
-    
+    return render(request, 'add.html')
+
 @csrf_exempt
 def get_rooms(request):
     if request.method == "POST":

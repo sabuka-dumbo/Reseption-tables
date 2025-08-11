@@ -18,6 +18,8 @@
             </div>
         </nav>
 
+        <div id="message">Room not available! Couldn't add booking.</div>
+
         <div style="overflow-x: auto; width: 100vw;">
         <table>
             <thead>
@@ -63,5 +65,18 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+          window.addEventListener('DOMContentLoaded', () => {
+        const msg = document.getElementById('message');
+        // Show message if url contains ?error=notavailable
+        if (window.location.search.includes('error=notavailable')) {
+        msg.classList.add('show');
+        setTimeout(() => {
+            msg.classList.remove('show');
+        }, 4000); // hide after 4 seconds
+        }
+  });
+    </script>
     </body>
 </html>
