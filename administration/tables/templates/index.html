@@ -2,27 +2,37 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tables</title>
-        <link rel="stylesheet" href="{% static 'styles.css' %}">
-    </head>
-    <body> 
-        <div id="tooltip" style="position:absolute; display:none; pointer-events:none; background:#333; color:#fff; padding:6px 10px; border-radius:4px; font-size:14px; z-index:10000; white-space: nowrap; z-index: 1000;"></div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tables</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
+<body>
+    <!-- Tooltip div -->
+    <div id="tooltip" style="
+        position:absolute;
+        display:none;
+        pointer-events:none;
+        background:#333;
+        color:#fff;
+        padding:6px 10px;
+        border-radius:4px;
+        font-size:14px;
+        z-index:10000;
+        white-space: nowrap;"></div>
 
-        <nav class="navigation">
-            <h1><a href="{% url 'index' %}">Tables</a></h1>
+    <nav class="navigation">
+        <h1><a href="{% url 'index' %}">Tables</a></h1>
+        <div style="margin-left: 20px; display: inline-block;">
+            <a href="{% url 'add_booking' %}">Add</a>
+            <a href="{% url 'delete_booking' %}">Delete</a>
+        </div>
+    </nav>
 
-            <div style="margin-left: 20px; display: inline-block;">
-                <a href="{% url 'add_booking' %}">Add</a>
-                <a href="{% url 'delete_booking' %}">Delete</a>
-            </div>
-        </nav>
+    <div id="message">Room not available! Couldn't add booking.</div>
 
-        <div id="message">Room not available! Couldn't add booking.</div>
-
-        <div style="overflow-x: auto; width: 100vw;">
+    <div style="overflow-x: auto; width: 100vw;">
         <table>
             <thead>
                 <tr>
@@ -48,8 +58,8 @@
                         {% with booking=room.booking_set.all|get_booking_for_day:day %}
                             {% if booking %}
                                 {% if day == booking.check_in_date.day %}
-                                    {# First day of booking - create spanning cell #}
                                     <td colspan="{{ booking.duration }}" 
+                                        class="booking"
                                         style="background-color: #e3f2fd;
                                             border-left: 2px solid #2196f3;
                                             border-right: 2px solid #2196f3;
@@ -69,33 +79,31 @@
     </div>
 
     <script>
-          window.addEventListener('DOMContentLoaded', () => {
-        const msg = document.getElementById('message');
-        // Show message if url contains ?error=notavailable
-        if (window.location.search.includes('error=notavailable')) {
-        msg.classList.add('show');
-        setTimeout(() => {
-            msg.classList.remove('show');
-        }, 4000); // hide after 4 seconds
-        }
-  });
+        window.addEventListener('DOMContentLoaded', () => {
+            // Show error message if ?error=notavailable in URL
+            const msg = document.getElementById('message');
+            if (window.location.search.includes('error=notavailable')) {
+                msg.classList.add('show');
+                setTimeout(() => {
+                    msg.classList.remove('show');
+                }, 4000);
+            }
 
-    const tooltip = document.getElementById('tooltip');
-
-    document.querySelectorAll('.booking').forEach(cell => {
-        cell.addEventListener('mousemove', e => {
-        const guestName = cell.textContent.trim() || 'Booked';
-
-        tooltip.style.left = (e.pageX + 15) + 'px';
-        tooltip.style.top = (e.pageY + 15) + 'px';
-        tooltip.textContent = guestName;
-        tooltip.style.display = 'block';
+            // Tooltip logic
+            const tooltip = document.getElementById('tooltip');
+            document.querySelectorAll('.booking').forEach(cell => {
+                cell.addEventListener('mousemove', e => {
+                    const guestName = cell.textContent.trim() || 'Booked';
+                    tooltip.style.left = (e.pageX + 15) + 'px';
+                    tooltip.style.top = (e.pageY + 15) + 'px';
+                    tooltip.textContent = guestName;
+                    tooltip.style.display = 'block';
+                });
+                cell.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
+            });
         });
-
-        cell.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
-        });
-    });
     </script>
-    </body>
+</body>
 </html>
