@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import *
+from django.utils import timezone
+from .models import Room, Booking, AddedBookings, DeletedBookings
 import json
-from django.db.models import Q
-from django.http import JsonResponse, HttpResponseBadRequest
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST 
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 
@@ -20,18 +22,16 @@ def delete_booking(request):
         who_deleted = request.POST.get('who_deleted')
 
         booking = Booking.objects.filter(id=booking_id).first()
-
-        DeletedBookings.objects.create(
-            room=booking.room,
-            guest_name=booking.guest_name,
-            check_in_date=booking.check_in_date,
-            check_out_date=booking.check_out_date,
-            deleted_by=who_deleted,
-            deleted_at=timezone.now()
-        )
-
-        booking.delete()
-
+        if booking:
+            DeletedBookings.objects.create(
+                room=booking.room,
+                guest_name=booking.guest_name,
+                check_in_date=booking.check_in_date,
+                check_out_date=booking.check_out_date,
+                deleted_by=who_deleted,
+                deleted_at=timezone.now()
+            )
+            booking.delete()
         return redirect('index')
 
     return render(request, 'delete.html')
@@ -77,6 +77,7 @@ def add_booking(request):
         except ValueError:
             return redirect('index')
 
+        # Check for overlap - inclusive of start/end dates
         overlapping = Booking.objects.filter(
             room=room2,
             check_in_date__lt=check_out,
@@ -84,7 +85,6 @@ def add_booking(request):
         )
 
         if overlapping.exists():
-            # Redirect with error flag in URL query params
             return redirect('/?error=notavailable')
 
         Booking.objects.create(
@@ -103,7 +103,9 @@ def add_booking(request):
         )
         return redirect('index')
 
-    return render(request, 'add.html')
+    # For GET, render add booking form with rooms for selection
+    rooms = Room.objects.all()
+    return render(request, 'add.html', {'rooms': rooms})
 
 @csrf_exempt
 def get_rooms(request):
