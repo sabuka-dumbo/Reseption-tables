@@ -5,17 +5,16 @@ fetch("/get_rooms/", {
     headers: {
         'Content-Type': 'application/json',
     },
-    body: JSON.stringify({  }),
+    body: JSON.stringify({}),
 })
 .then(response => response.json())
 .then(data => {
     for (const room of data.rooms) {
-        const booking_div = document.createElement("div");
-        booking_div.classList.add("booking");
-        booking_div.innerHTML = `
-            <option value="${room.id}">Room: ${room.room_number}</option>
-        `;
-        select_input.appendChild(booking_div);
+        console.log(room.id);
+        const option = document.createElement("option");
+        option.value = room.id;
+        option.textContent = `Room: ${room.room_number}`;
+        select_input.appendChild(option);
     }
 })
 .catch(error => {

@@ -62,13 +62,15 @@ def get_bookings(request):
 
 def add_booking(request):
     if request.method == 'POST':
-        room_id = request.POST.get('room')
+        room_id = request.POST.get('room-id')
+        print(room_id)
+        room2 = Room.objects.get(id=room_id)
         guest_name = request.POST.get('guest_name')
         check_in_date = request.POST.get('check_in_date')
         check_out_date = request.POST.get('check_out_date')
 
         Booking.objects.create(
-            room_id=room_id,
+            room=room2,
             guest_name=guest_name,
             check_in_date=check_in_date,
             check_out_date=check_out_date
