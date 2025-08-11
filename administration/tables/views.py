@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Room
+from .models import *
 
 def index(request):
     rooms = Room.objects.prefetch_related('booking_set').all()
@@ -10,7 +10,9 @@ def index(request):
     })
 
 def delete_booking(request):
+    bookings = Booking.objects.all().select_related('room')
     if request.method == 'POST':
         booking_id = request.POST.get('booking_id')
         # Logic to delete the booking
-    return render(request, 'delete.html')
+
+    return render(request, 'delete.html', {'bookings': bookings})
