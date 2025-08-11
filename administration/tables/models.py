@@ -31,16 +31,13 @@ class DeletedBookings(models.Model):
     def __str__(self):
         return f"Deleted by {self.deleted_by} on {self.deleted_at}"
 
-class ChangedBookings(models.Model):
+class AddedBookings(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    old_guest_name = models.CharField(max_length=100)
-    new_guest_name = models.CharField(max_length=100)
-    old_check_in_date = models.DateField()
-    old_check_out_date = models.DateField()
-    new_check_in_date = models.DateField()
-    new_check_out_date = models.DateField()
-    changed_at = models.DateTimeField(auto_now_add=True)
-    changed_by = models.CharField(max_length=150)
+    guest_name = models.CharField(max_length=100)
+    check_in_date = models.DateField()
+    check_out_date = models.DateField()
+    added_at = models.DateTimeField(auto_now_add=True)
+    added_by = models.CharField(max_length=150)
 
     def __str__(self):
-        return f"Changed by {self.changed_by} on {self.changed_at}"
+        return f"Added by {self.added_by} on {self.added_at}"

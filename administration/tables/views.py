@@ -60,8 +60,21 @@ def get_bookings(request):
 
     return JsonResponse({"error": "Only POST allowed"}, status=405)
 
-def change_booking(request):
+def add_booking(request):
     if request.method == 'POST':
         pass
     else:
-        return render(request, 'change.html')
+        return render(request, 'add.html')
+    
+@csrf_exempt
+def get_rooms(request):
+    if request.method == "POST":
+        try:
+            json.loads(request.body)
+            rooms = Room.objects.all().values('id', 'room_number')
+
+            return JsonResponse({"rooms": rooms})
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Only POST allowed"}, status=405)

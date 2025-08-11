@@ -5,4 +5,4 @@ from . import models
 admin.site.register(models.Room)
 admin.site.register(models.Booking)
 admin.site.register(models.DeletedBookings)
-admin.site.register(models.ChangedBookings)
+admin.site.register(models.AddedBookings)

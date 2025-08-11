@@ -19,19 +19,19 @@
             </div>
         </nav>
 
-        <form action="{% url 'change_booking' %}" method="POST">
+        <form action="{% url 'add_booking' %}" method="POST">
             {% csrf_token %}
             <div class="bookings-container" id="bookings-container" name="delete_the_booking">
                 <select name="bookings" id="bookings-select">
                 </select>
 
-                <input type="text" name="who_deleted" required placeholder="Who deletes the field" min="4">
+                <input type="text" name="who_added" required placeholder="Who adds the booking" min="4">
             </div>
 
             <h1>Are you sure you want to delete the booking?</h1>
             <button type="submit">Delete Booking</button>
         </form>
 
-        <script src="{% static 'delete.js' %}"></script>
+        <script src="{% static 'add.js' %}"></script>
     </body>
 </html>
