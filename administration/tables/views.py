@@ -23,8 +23,22 @@ def delete_booking(request):
 def get_bookings(request):
     if request.method == "POST":
         try:
-            data_from_js = json.loads(request.body)
-            bookings = list(Booking.objects.values())
+            json.loads(request.body)
+
+            bookings = [
+                {
+                    "id": b.id,
+                    "guest_name": b.guest_name,
+                    "check_in_date": b.check_in_date.isoformat(),
+                    "check_out_date": b.check_out_date.isoformat(),
+                    "room": {
+                        "id": b.room.id,
+                        "room_number": b.room.room_number
+                    }
+                }
+                for b in Booking.objects.select_related("room")
+            ]
+
             return JsonResponse({"bookings": bookings})
         except json.JSONDecodeError as e:
             return JsonResponse({"error": str(e)}, status=400)

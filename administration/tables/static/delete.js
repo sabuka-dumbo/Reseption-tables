@@ -1,4 +1,4 @@
-const container_div = document.getElementById("bookings-container");
+const select_input = document.getElementById("bookings-select");
 
 fetch("/get_bookings/", {
     method: "POST",
@@ -13,9 +13,9 @@ fetch("/get_bookings/", {
         const booking_div = document.createElement("div");
         booking_div.classList.add("booking");
         booking_div.innerHTML = `
-            <p>Room: ${booking.room.room_number}</p>
+            <option value="${booking.id}">Room: ${booking.room.room_number} ${booking.guest_name}</option>
         `;
-        container_div.appendChild(booking_div);
+        select_input.appendChild(booking_div);
     }
 
     console.log(data.bookings);
