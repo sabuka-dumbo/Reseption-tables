@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 import json
 from django.http import JsonResponse, HttpResponseBadRequest
@@ -14,8 +14,23 @@ def index(request):
 
 def delete_booking(request):
     if request.method == 'POST':
-        booking_id = request.POST.get('booking_id')
-        # Logic to delete the booking
+        booking_id = request.POST.get('bookings')
+        who_deleted = request.POST.get('who_deleted')
+
+        booking = Booking.objects.filter(id=booking_id).first()
+
+        DeletedBookings.objects.create(
+            room=booking.room,
+            guest_name=booking.guest_name,
+            check_in_date=booking.check_in_date,
+            check_out_date=booking.check_out_date,
+            deleted_by=who_deleted,
+            deleted_at=timezone.now()
+        )
+
+        booking.delete()
+
+        return redirect('index')
 
     return render(request, 'delete.html')
 
