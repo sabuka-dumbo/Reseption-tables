@@ -211,3 +211,7 @@ input {
   pointer-events: auto;
 }
 
+.booking {
+  cursor: pointer;
+}
+
